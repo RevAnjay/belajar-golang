@@ -9,6 +9,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"belajar-golang2/models"
 )
 
 // looping kata
@@ -127,10 +128,10 @@ func todoList() {
 // todo list menggunakan database mysql
 
 // structure model databasenya
-type Todo struct {
-	gorm.Model
-	Title string
-}
+// type Todo struct {
+// 	gorm.Model
+// 	Title string
+// }
 
 var DB *gorm.DB
 
@@ -142,7 +143,7 @@ func connDatabase() {
 		fmt.Println("gagal terhubung ke database")
 	}
 
-	database.AutoMigrate(&Todo{})
+	database.AutoMigrate(&models.Todo{})
 
 	DB = database
 
@@ -151,7 +152,7 @@ func connDatabase() {
 
 func showTodoMysql() {
 	// query ke database buat ambil semua todo yang ada
-	var allTodos []Todo
+	var allTodos []models.Todo
 	DB.Find(&allTodos)
 
 	// validasi kalo gada todonya maka kembalikan
@@ -172,7 +173,7 @@ func addTodoMysql(scanner *bufio.Scanner) {
 	fmt.Print("masukan todo baru: ")
 	scanner.Scan()
 
-	todo := Todo{Title: scanner.Text()}
+	todo := models.Todo{Title: scanner.Text()}
 	DB.Create(&todo)
 	fmt.Println("berhasil menambahkan todo: ", todo.Title)
 }
@@ -195,7 +196,7 @@ func removeTodoMysql(scanner *bufio.Scanner) {
 	}
 
 	// query ke database
-	var todo Todo
+	var todo models.Todo
 	result := DB.First(&todo, id)
 	if result.Error != nil {
 		fmt.Println("todo tidak ditemukan")
